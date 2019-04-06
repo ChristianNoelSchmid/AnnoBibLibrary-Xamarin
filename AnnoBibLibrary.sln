@@ -1,0 +1,23 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnnoBibLibrary-Shared", "AnnoBibLibrary-Shared\AnnoBibLibrary-Shared.csproj", "{1723F6CF-57FD-47BD-891D-7235142460A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnnoBibLibrary-Mac", "AnnoBibLibrary-Mac\AnnoBibLibrary-Mac.csproj", "{18388EDB-A897-4FB3-9DDD-18776F32CB6B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1723F6CF-57FD-47BD-891D-7235142460A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1723F6CF-57FD-47BD-891D-7235142460A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1723F6CF-57FD-47BD-891D-7235142460A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1723F6CF-57FD-47BD-891D-7235142460A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18388EDB-A897-4FB3-9DDD-18776F32CB6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18388EDB-A897-4FB3-9DDD-18776F32CB6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18388EDB-A897-4FB3-9DDD-18776F32CB6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18388EDB-A897-4FB3-9DDD-18776F32CB6B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
