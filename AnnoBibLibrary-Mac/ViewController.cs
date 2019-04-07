@@ -3,7 +3,7 @@
 using AppKit;
 using Foundation;
 
-namespace AnnoBibLibraryMac
+namespace AnnoBibLibrary.Mac
 {
     public partial class ViewController : NSViewController
     {

@@ -1,7 +1,7 @@
 ﻿using AppKit;
 using Foundation;
 
-namespace AnnoBibLibraryMac
+namespace AnnoBibLibrary.Mac
 {
     [Register("AppDelegate")]
     public class AppDelegate : NSApplicationDelegate

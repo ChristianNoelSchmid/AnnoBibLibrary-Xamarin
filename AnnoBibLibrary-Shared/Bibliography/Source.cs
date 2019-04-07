@@ -100,14 +100,7 @@ namespace AnnoBibLibrary.Shared.Bibliography
                 if (field == null || field.FormattedValues.Length == 0) return ">> Unknown Source <<";
 
                 else
-                {
-                    // Move the "the" at the beginning of Sources beginning with the word,
-                    // to the end of the string
-                    if (field.FormattedValues[0].ToLower().StartsWith("the "))
-                        return field.FormattedValues[0].Substring(4) + ", the";
-
-                    else return field.FormattedValues[0];
-                }
+                    return field.FormattedValues[0];
 
             }
         }

@@ -15,10 +15,10 @@ namespace AnnoBibLibrary.Shared
     public static class GlobalResources
     {
         public static string ExternalDataDirectory { get; } = 
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "AnnoBibLibrary\\");
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "AnnoBibLibrary");
 
-        public static string SourcesDirectory { get; } = Path.Combine(ExternalDataDirectory, "Sources\\");
-        public static string LibrariesDirectory { get; } = Path.Combine(ExternalDataDirectory, "Libraries\\"); 
+        public static string SourcesDirectory { get; } = Path.Combine(ExternalDataDirectory, "Sources");
+        public static string LibrariesDirectory { get; } = Path.Combine(ExternalDataDirectory, "Libraries"); 
 
         // A collection of common formats
         private static Dictionary<string, CitationFormat> CitationFormats = new Dictionary<string, CitationFormat>();
@@ -54,7 +54,7 @@ namespace AnnoBibLibrary.Shared
             CitationFormats.Add("ebook", printFormat);
         }
 
-        private static void CreateInitialDirectories()
+        public static void CreateInitialDirectories()
         {
             var documentsFolder = Environment.SpecialFolder.Personal.ToString();
             if (!Directory.Exists(Path.Combine(documentsFolder, ExternalDataDirectory)))

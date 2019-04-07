@@ -18,9 +18,14 @@ namespace AnnoBibLibrary.Shared.Fields
             get
             {
                 string[] values = new string[Values.Count];
+                int index = 0; Values.ForEach((val) => { values[index] = (string)val; ++index; });
+
                 for(int i = 0; i < Values.Count; ++i)
                 {
-                    values[i] = (string)Values[i];
+                    // Move the "the" at the beginning of Sources beginning with the word,
+                    // to the end of the string
+                    if (values[i].ToLower().StartsWith("the ", StringComparison.Ordinal))
+                        values[i] = values[i].Substring(4) + ", the";
                 }
 
                 return values;
