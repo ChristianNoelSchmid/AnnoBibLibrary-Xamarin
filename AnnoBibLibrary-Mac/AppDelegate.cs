@@ -1,10 +1,10 @@
-﻿using AppKit;
+using AppKit;
 using Foundation;
 
 namespace AnnoBibLibrary.Mac
 {
     [Register("AppDelegate")]
-    public class AppDelegate : NSApplicationDelegate
+    public partial class AppDelegate : NSApplicationDelegate
     {
         public AppDelegate()
         {
@@ -12,7 +12,7 @@ namespace AnnoBibLibrary.Mac
 
         public override void DidFinishLaunching(NSNotification notification)
         {
-            // Insert code here to initialize your application
+     
         }
 
         public override void WillTerminate(NSNotification notification)
