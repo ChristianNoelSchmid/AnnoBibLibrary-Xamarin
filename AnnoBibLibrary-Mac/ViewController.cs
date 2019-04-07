@@ -16,7 +16,6 @@ namespace AnnoBibLibrary.Mac
             base.ViewDidLoad();
 
             // Do any additional setup after loading the view.
-
         }
 
         public override NSObject RepresentedObject

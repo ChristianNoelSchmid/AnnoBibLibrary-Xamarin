@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct" initialViewController="B8D-0N-5wS">
     <dependencies>
-        <deployment version="101304" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -1179,8 +1178,8 @@
                         </connections>
                     </view>
                     <connections>
-                        <outlet property="SplitViewMain" destination="vQF-M4-Ys8" id="5Gh-Dk-a0X"/>
-                        <outlet property="TextViewNotes" destination="rcR-C7-Xhb" id="FgK-es-1DX"/>
+                        <outlet property="SplitViewMain" destination="m2S-Jp-Qdl" id="meX-uL-oD1"/>
+                        <outlet property="TextViewNotes" destination="cqt-cU-LCM" id="AYm-0F-N9w"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
