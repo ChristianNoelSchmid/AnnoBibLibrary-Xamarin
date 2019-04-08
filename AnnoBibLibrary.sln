@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnnoBibLibrary-Shared", "An
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnnoBibLibrary-Tests", "AnnoBibLibrary-Tests\AnnoBibLibrary-Tests.csproj", "{52E86E60-CE6D-4D30-94E0-0FC3AF9544C3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnnoBibLibrary-Mac", "AnnoBibLibrary-Mac\AnnoBibLibrary-Mac.csproj", "{6243A4CF-4796-42AE-9228-285E72382F25}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,5 +21,9 @@ Global
 		{52E86E60-CE6D-4D30-94E0-0FC3AF9544C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52E86E60-CE6D-4D30-94E0-0FC3AF9544C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52E86E60-CE6D-4D30-94E0-0FC3AF9544C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6243A4CF-4796-42AE-9228-285E72382F25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6243A4CF-4796-42AE-9228-285E72382F25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6243A4CF-4796-42AE-9228-285E72382F25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6243A4CF-4796-42AE-9228-285E72382F25}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
