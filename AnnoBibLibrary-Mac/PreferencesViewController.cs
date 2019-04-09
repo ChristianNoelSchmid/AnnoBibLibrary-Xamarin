@@ -12,7 +12,11 @@ namespace AnnoBibLibraryMac
 {
 	public partial class PreferencesViewController : NSViewController
 	{
-		public PreferencesViewController (IntPtr handle) : base (handle)
+        #region Private Properties
+        private Library OpenLibrary { get; set; }
+        #endregion
+
+        public PreferencesViewController (IntPtr handle) : base (handle)
 		{
 		}
 
@@ -20,9 +24,11 @@ namespace AnnoBibLibraryMac
         {
             base.ViewDidLoad();
 
+            OpenLibrary = GlobalResources.OpenLibrary;
+
             DataSourceTableViewKeywordGroups keywordGroups = new DataSourceTableViewKeywordGroups();
 
-            keywordGroups.Keywords.AddRange(GlobalResources.OpenLibrary.DefaultKeywordGroupsFormatted);
+            keywordGroups.Keywords.AddRange(OpenLibrary.DefaultKeywordGroupsFormatted);
 
             TableViewKeywordGroups.DataSource = keywordGroups;
             TableViewKeywordGroups.Delegate = new DelegateTableViewKeywordGroups(keywordGroups);

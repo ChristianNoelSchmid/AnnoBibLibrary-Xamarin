@@ -15,12 +15,12 @@ namespace AnnoBibLibrary.Shared.Bibliography
 {
     [JsonObject(MemberSerialization.OptIn)]
     public class Source : IComparable
-    { 
+    {
         // Constructor that sets Source to provided Format. Useful for testing purposes
         public Source(CitationFormat citationFormat)
         {
             CitationFormatName = citationFormat.Name;
-            foreach(var key in citationFormat.Fields.Keys)
+            foreach (var key in citationFormat.Fields.Keys)
             {
                 if (citationFormat.Fields[key].Item1 == typeof(NameField))
                     fields.Add(key, new NameField(key, citationFormat.Fields[key].Item2));
@@ -73,10 +73,10 @@ namespace AnnoBibLibrary.Shared.Bibliography
             }
         }
 
-/* ************************************************
- * CITATION FORMAT PROPERTIES/METHODS
- * ************************************************
- */
+        /* ************************************************
+         * CITATION FORMAT PROPERTIES/METHODS
+         * ************************************************
+         */
         // The specified format for the particular citation
         [JsonProperty]
         public string CitationFormatName { get; private set; }
@@ -87,12 +87,12 @@ namespace AnnoBibLibrary.Shared.Bibliography
         private Dictionary<string, Field> fields = new Dictionary<string, Field>();
         public List<Field> Fields => fields.Values.ToList();
 
-/* *************************************************
- * Common Fields that will, generally, be universal to all CitationFormats
- * If a Source does not contain the specified Field, or if there is no data in said
- * Field, a formatted string will be provided instead
- * *************************************************
- */
+        /* *************************************************
+         * Common Fields that will, generally, be universal to all CitationFormats
+         * If a Source does not contain the specified Field, or if there is no data in said
+         * Field, a formatted string will be provided instead
+         * *************************************************
+         */
         public string TitleFormatted {
             get
             {
@@ -114,7 +114,7 @@ namespace AnnoBibLibrary.Shared.Bibliography
                 if (authorField == null || authorField.FormattedValues.Length == 0) return ">> Unknown Author <<";
 
                 else return authorField.FormattedValues.Aggregate((concat, next) => concat += " and " + next);
-            } 
+            }
         }
 
         public string PublisherFormatted
@@ -140,13 +140,13 @@ namespace AnnoBibLibrary.Shared.Bibliography
                 else return publishYearFormatted.FormattedValues[0];
             }
         }
-/* **************************************************
- */
+        /* **************************************************
+         */
         // Retrieves a Field from the Source Fields. Requires Field type in order to
         // correctly convert
-        
+
         public Field this[string key]
-        { 
+        {
             get
             {
                 key = key.ToLower();
@@ -186,21 +186,21 @@ namespace AnnoBibLibrary.Shared.Bibliography
                 return keys;
             }
         }
-/* ************************************************
- * ************************************************
- */
+        /* ************************************************
+         * ************************************************
+         */
 
 
-/* ************************************************
- * EQUALS AND HASHCODE METHODS
- * ************************************************
- */
+        /* ************************************************
+         * EQUALS AND HASHCODE METHODS
+         * ************************************************
+         */
         // A Source is different if its Title, Author, or Publish Date is different
         // Because of this, those values will be compared in GetHashCode and Equals
         public override int GetHashCode()
         {
-            return TitleFormatted.ToLower().GetHashCode() + 
-                   AuthorsFormatted.ToLower().GetHashCode() * 3 + 
+            return TitleFormatted.ToLower().GetHashCode() +
+                   AuthorsFormatted.ToLower().GetHashCode() * 3 +
                    PublishYearFormatted.GetHashCode();
         }
         public override bool Equals(object obj)
@@ -217,8 +217,8 @@ namespace AnnoBibLibrary.Shared.Bibliography
 
             else return false;
         }
-/* *************************************************
- */
+        /* *************************************************
+         */
 
         // Compare the Source to another Source, using the "title" field as a comparator
         // If "Title" does not exist, or if object being compared to isn't a Source, return 0
@@ -270,22 +270,47 @@ namespace AnnoBibLibrary.Shared.Bibliography
             }
 
             return source;
-        } 
+        }
 
         // Sets all values within a specific KeywordGroup
         public void SetKeywordGroup(string group, params string[] keywords)
         {
-            if(Keywords.ContainsKey(group)) Keywords[group].Clear();
+            group = group.ToLower().Trim();
+
+            if (Keywords.ContainsKey(group)) Keywords[group].Clear();
             if (keywords == null) return;
 
             if (!Keywords.ContainsKey(group.ToLower())) Keywords.Add(group, new List<string>(keywords));
             else Keywords[group.ToLower()].AddRange(keywords);
         }
 
+        public string[] GetKeywords(string group)
+        {
+            group = group.ToLower().Trim();
+
+            if (Keywords.ContainsKey(group)) return Keywords[group].ToArray();
+            else throw new FieldNotFoundException("Could not find Keyword Group in source");
+        }
+
         public void RemoveKeywordGroup(string group)
         {
+            group = group.ToLower().Trim();
+
             if (!Keywords.ContainsKey(group.ToLower())) return;
             Keywords.Remove(group.ToLower());
         }
+
+        public void RenameKeywordGroup(string originalName, string newName)
+        {
+            originalName = originalName.ToLower().Trim();
+            newName = newName.ToLower().Trim();
+
+            if (Keywords.ContainsKey(originalName))
+            {
+                if (!Keywords.ContainsKey(newName)) Keywords.Add(newName, new List<string>(Keywords[originalName]));
+                else Keywords[originalName].ForEach((keyword) => Keywords[newName].Add(keyword));
+            }
+        }
+
     }
 }

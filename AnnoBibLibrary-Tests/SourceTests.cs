@@ -7,11 +7,11 @@ using System;
 namespace AnnoBibLibrary.Tests
 { 
     [TestFixture]
-    public class SourceTests_AddAndRemoveSource
+    public class SourceTests
     {
         private CitationFormat format;
 
-        public SourceTests_AddAndRemoveSource()
+        public SourceTests()
         {
             GlobalResources.CreateInitialDirectories();
 

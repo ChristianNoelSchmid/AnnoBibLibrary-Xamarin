@@ -58,9 +58,34 @@ namespace AnnoBibLibrary.Shared
             DefaultKeywordGroups = new List<string>();
 
             foreach (string groupName in groupNames)
-                DefaultKeywordGroups.Add(groupName);
+                DefaultKeywordGroups.Add(groupName.ToLower().Trim());
 
             return true;
+        }
+
+        /// <summary>
+        /// Renames a keyword group,
+        /// changes each Source in the library to reflect the change
+        /// </summary>
+        public void RenameDefaultKeywordGroup(string originalName, string newName)
+        {
+            originalName = originalName.ToLower().Trim();
+            newName = newName.ToLower().Trim();
+
+            for(int i = 0; i < DefaultKeywordGroups.Count; ++i)
+            {
+                if(DefaultKeywordGroups[i] == originalName)
+                {
+                    DefaultKeywordGroups[i] = newName;
+
+                    foreach(var source in _sources)
+                        source.RenameKeywordGroup(originalName, newName);
+
+                    return;
+                }
+            }
+
+            throw new KeyNotFoundException("The supplied keyword group was not found.");
         }
 
         public bool RemoveDefaultKeywordGroup(string groupName)
