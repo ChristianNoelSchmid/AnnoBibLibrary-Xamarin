@@ -854,6 +854,7 @@
                         </connections>
                     </window>
                     <connections>
+                        <outlet property="MainWindow" destination="IQv-IB-iLA" id="pU5-O2-KPp"/>
                         <segue destination="XfG-lQ-9wD" kind="relationship" relationship="window.shadowedContentViewController" id="cq2-FE-JQM"/>
                     </connections>
                 </windowController>

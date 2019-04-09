@@ -6,6 +6,7 @@ using Foundation;
 using AppKit;
 using AnnoBibLibraryMac.DataSources;
 using AnnoBibLibraryMac.ViewDelegates;
+using AnnoBibLibrary.Shared;
 
 namespace AnnoBibLibraryMac
 {
@@ -21,9 +22,7 @@ namespace AnnoBibLibraryMac
 
             DataSourceTableViewKeywordGroups keywordGroups = new DataSourceTableViewKeywordGroups();
 
-            keywordGroups.Keywords.Add("People");
-            keywordGroups.Keywords.Add("Places");
-            keywordGroups.Keywords.Add("Concepts");
+            keywordGroups.Keywords.AddRange(GlobalResources.OpenLibrary.DefaultKeywordGroupsFormatted);
 
             TableViewKeywordGroups.DataSource = keywordGroups;
             TableViewKeywordGroups.Delegate = new DelegateTableViewKeywordGroups(keywordGroups);

@@ -24,12 +24,15 @@ namespace AnnoBibLibrary.Shared
         private static Dictionary<string, CitationFormat> CitationFormats = new Dictionary<string, CitationFormat>();
         public static string[] CitationFormatsFormatted => CitationFormats.Keys.ToList().Select((key) => key = Tools.Capitalize(key)).ToArray();
 
+        public static Library OpenLibrary { get; } = new Library("Test Library");
+
         // Initialize all the Resource Data, avaialble throughout the
         // entire program
         // TODO - eventually store in external data
         public static void Initialize()
         {
             CreateInitialDirectories();
+            OpenLibrary.SetDefaultKeywordGroups("Keywords", "Concepts");
 
             // Create a print CitationFormat
             CitationFormat printFormat = new CitationFormat("Print");

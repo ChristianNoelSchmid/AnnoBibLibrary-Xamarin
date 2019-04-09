@@ -13,6 +13,7 @@ namespace AnnoBibLibraryMac
 	{
 		public MainViewController (IntPtr handle) : base (handle)
 		{
+            
 		}
 
         public override void ViewDidLoad()
