@@ -1,11 +1,10 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnnoBibLibrary-Shared", "AnnoBibLibrary-Shared\AnnoBibLibrary-Shared.csproj", "{1723F6CF-57FD-47BD-891D-7235142460A3}"
+VisualStudioVersion = 15.0.28307.489
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnnoBibLibrary-Shared", "AnnoBibLibrary-Shared\AnnoBibLibrary-Shared.csproj", "{1723F6CF-57FD-47BD-891D-7235142460A3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnnoBibLibrary-Tests", "AnnoBibLibrary-Tests\AnnoBibLibrary-Tests.csproj", "{52E86E60-CE6D-4D30-94E0-0FC3AF9544C3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnnoBibLibrary-Mac", "AnnoBibLibrary-Mac\AnnoBibLibrary-Mac.csproj", "{6243A4CF-4796-42AE-9228-285E72382F25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +20,11 @@ Global
 		{52E86E60-CE6D-4D30-94E0-0FC3AF9544C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52E86E60-CE6D-4D30-94E0-0FC3AF9544C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52E86E60-CE6D-4D30-94E0-0FC3AF9544C3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6243A4CF-4796-42AE-9228-285E72382F25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6243A4CF-4796-42AE-9228-285E72382F25}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6243A4CF-4796-42AE-9228-285E72382F25}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6243A4CF-4796-42AE-9228-285E72382F25}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {70F4799C-F0C0-41D7-9811-2C6E34677174}
 	EndGlobalSection
 EndGlobal

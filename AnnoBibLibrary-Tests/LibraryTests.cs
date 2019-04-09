@@ -1,5 +1,4 @@
 ﻿using System;
-using System;
 using System.Collections.Generic;
 using AnnoBibLibrary.Shared;
 using AnnoBibLibrary.Shared.Bibliography;
@@ -16,6 +15,7 @@ namespace AnnoBibLibrary.Tests
         public LibraryTests()
         {
             GlobalResources.Initialize();
+            Console.WriteLine("Testing version control...");
 
             _library = new Library("test");
             _library.SetDefaultKeywordGroups("People", "Places", "Concepts");
