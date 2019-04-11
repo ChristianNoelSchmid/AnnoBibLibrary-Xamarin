@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6243A4CF-4796-42AE-9228-285E72382F25}</ProjectGuid>
+    <ProjectGuid>{40D35F87-E48F-4C90-A3AE-6B446CFD6E58}</ProjectGuid>
     <ProjectTypeGuids>{A3F8F2AB-B479-4A4A-A458-A89E7DC349F1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
     <RootNamespace>AnnoBibLibraryMac</RootNamespace>
@@ -72,8 +72,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
-    <Folder Include="ViewDelegates\" />
     <Folder Include="Data Sources\" />
+    <Folder Include="Control Delegates\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -83,28 +83,15 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="AppDelegate.designer.cs">
-      <DependentUpon>AppDelegate.cs</DependentUpon>
+    <Compile Include="ViewController.cs" />
+    <Compile Include="ViewController.designer.cs">
+      <DependentUpon>ViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="PreferencesViewController.cs" />
-    <Compile Include="PreferencesViewController.designer.cs">
-      <DependentUpon>PreferencesViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MainViewController.cs" />
-    <Compile Include="MainViewController.designer.cs">
-      <DependentUpon>MainViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewDelegates\DelegateTableViewKeywordGroups.cs" />
     <Compile Include="Data Sources\DataSourceTableViewKeywordGroups.cs" />
+    <Compile Include="Control Delegates\DelegateTableViewKeywordGroups.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AnnoBibLibrary-Shared\AnnoBibLibrary-Shared.csproj">
-      <Project>{1723F6CF-57FD-47BD-891D-7235142460A3}</Project>
-      <Name>AnnoBibLibrary-Shared</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
 </Project>

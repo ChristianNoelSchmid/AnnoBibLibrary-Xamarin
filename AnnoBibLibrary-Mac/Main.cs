@@ -1,5 +1,4 @@
-﻿using AnnoBibLibrary.Shared;
-using AppKit;
+﻿using AppKit;
 
 namespace AnnoBibLibraryMac
 {
@@ -7,8 +6,6 @@ namespace AnnoBibLibraryMac
     {
         static void Main(string[] args)
         {
-            GlobalResources.Initialize();
-
             NSApplication.Init();
             NSApplication.Main(args);
         }

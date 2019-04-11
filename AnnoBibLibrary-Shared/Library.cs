@@ -27,24 +27,24 @@ namespace AnnoBibLibrary.Shared
         // These keywords will be avaialble as default for a new Source, or if the client
         // wishes to add to a Source being edited
         [JsonProperty]
-        private List<string> DefaultKeywordGroups { get; set; }
-        public string[] DefaultKeywordGroupsFormatted
+        private List<string> KeywordGroups { get; set; } = new List<string>();
+        public string[] KeywordGroupsFormatted
         {
-            get => DefaultKeywordGroups.Select((group) => group = Tools.Capitalize(group)).ToArray();
+            get => KeywordGroups.Select((group) => group = Tools.Capitalize(group)).ToArray();
         }
 
         public Library(string name)
         {
-            List<string> strings = new List<string>();
             Name = name;
+            SetKeywordGroups("Keywords");
         }
 
         [JsonConstructor]
         public Library(string name, string[] defaultKeywordGroups, int[] sourceHashCodes)
         {
             Name = name;
-            if (defaultKeywordGroups.Length == 0) DefaultKeywordGroups = new List<string>(new string[] { "Keywords" });
-            else DefaultKeywordGroups = new List<string>(defaultKeywordGroups);
+            if (defaultKeywordGroups.Length == 0) SetKeywordGroups("Keywords");
+            else KeywordGroups = new List<string>(defaultKeywordGroups);
 
             foreach (int hashCode in sourceHashCodes)
                 _sources.Add(Source.Load($"C:\\Users\\Christian\\Documents\\AnnoBibLibrary\\Sources\\{hashCode}.abs"));
@@ -52,13 +52,36 @@ namespace AnnoBibLibrary.Shared
 
         public bool AddSource(Source source) => _sources.Add(source);
 
-        // Adds a new Default Keyword Group to the Library, to be considered for each new and edited Source
-        public bool SetDefaultKeywordGroups(params string[] groupNames)
+        // Adds new Keyword groups to the Library
+        // Automatically compares supplied array with current Keyword Group list
+        // Replacing each Keyword in the Source collection with the new keyword
+        // Checking for confirmation will be required in the User Interface
+        public bool SetKeywordGroups(params string[] groupNames)
         {
-            DefaultKeywordGroups = new List<string>();
+            // Index to both collections - must be local to entire method, as its used past the
+            // for loop
+            int index;
+            for (index = 0; index < groupNames.Length && index < KeywordGroups.Count; ++index)
+            {
+                // Check each string in groupNames to see if it does not match the Keyword Group
+                // If it doesn't, replace the keyword group for all sources
+                if(groupNames[index].ToLower().Trim() != KeywordGroups[index])
+                    RenameKeywordGroup(KeywordGroups[index], groupNames[index].ToLower().Trim());
+            }
 
-            foreach (string groupName in groupNames)
-                DefaultKeywordGroups.Add(groupName.ToLower().Trim());
+            // Remove any extra Keyword Groups at the end of the list
+            if (index < KeywordGroups.Count)
+                KeywordGroups.RemoveRange(index, KeywordGroups.Count - (index));
+
+            // Add any extra new group names to Keyword Groups
+            else if(index < groupNames.Length)
+            {
+                for(; index < groupNames.Length; ++index)
+                    KeywordGroups.Add(groupNames[index].ToLower().Trim());
+            }
+    
+            // At the end, when all is said and done, sort the list
+            KeywordGroups.Sort();
 
             return true;
         }
@@ -67,16 +90,16 @@ namespace AnnoBibLibrary.Shared
         /// Renames a keyword group,
         /// changes each Source in the library to reflect the change
         /// </summary>
-        public void RenameDefaultKeywordGroup(string originalName, string newName)
+        private void RenameKeywordGroup(string originalName, string newName)
         {
             originalName = originalName.ToLower().Trim();
             newName = newName.ToLower().Trim();
 
-            for(int i = 0; i < DefaultKeywordGroups.Count; ++i)
+            for(int i = 0; i < KeywordGroups.Count; ++i)
             {
-                if(DefaultKeywordGroups[i] == originalName)
+                if(KeywordGroups[i] == originalName)
                 {
-                    DefaultKeywordGroups[i] = newName;
+                    KeywordGroups[i] = newName;
 
                     foreach(var source in _sources)
                         source.RenameKeywordGroup(originalName, newName);
@@ -88,9 +111,9 @@ namespace AnnoBibLibrary.Shared
             throw new KeyNotFoundException("The supplied keyword group was not found.");
         }
 
-        public bool RemoveDefaultKeywordGroup(string groupName)
+        public bool RemoveKeywordGroup(string groupName)
         {
-            return DefaultKeywordGroups.Remove(groupName);
+            return KeywordGroups.Remove(groupName);
         }
 
 

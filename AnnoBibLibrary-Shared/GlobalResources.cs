@@ -32,7 +32,7 @@ namespace AnnoBibLibrary.Shared
         public static void Initialize()
         {
             CreateInitialDirectories();
-            OpenLibrary.SetDefaultKeywordGroups("Keywords", "Concepts");
+            OpenLibrary.SetKeywordGroups("Keywords", "Concepts");
 
             // Create a print CitationFormat
             CitationFormat printFormat = new CitationFormat("Print");

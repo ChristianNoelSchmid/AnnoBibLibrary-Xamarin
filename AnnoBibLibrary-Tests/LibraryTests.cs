@@ -1,5 +1,4 @@
 ﻿using System;
-using System;
 using System.Collections.Generic;
 using AnnoBibLibrary.Shared;
 using AnnoBibLibrary.Shared.Bibliography;
@@ -10,15 +9,16 @@ namespace AnnoBibLibrary.Tests
     [TestFixture]
     public class LibraryTests
     {
-        private Library _library;
-        private Source _source1, _source2;
+        private readonly Library _library;
+        private readonly Source  _source1, _source2;
     
         public LibraryTests()
         {
             GlobalResources.Initialize();
 
             _library = new Library("test");
-            _library.SetDefaultKeywordGroups("People", "Places", "Concepts");
+            _library.SetKeywordGroups("People", "Places", "Concepts");
+
             var format = GlobalResources.GetFormat("Print");
 
             _source1 = new Source(format);
@@ -34,14 +34,15 @@ namespace AnnoBibLibrary.Tests
             _library.AddSource(_source1);
             _library.AddSource(_source2);
 
-            _source1.SetKeywordGroup(_library.DefaultKeywordGroupsFormatted[0], "Aslan", "Edmund", "Susan");
-            _source2.SetKeywordGroup(_library.DefaultKeywordGroupsFormatted[1], "Middle Earth", "The Shire");
+            _source1.SetKeywordGroup(_library.KeywordGroupsFormatted[0], "Aslan", "Edmund", "Susan");
+            _source2.SetKeywordGroup(_library.KeywordGroupsFormatted[1], "Middle Earth", "The Shire");
         }
     
         [Test]
-        public void TestLibraryChangeSource()
+        public void TestLibraryChangeKeywordGroup()
         {
-            _library.RenameDefaultKeywordGroup("Places", "Locations");
+            _library.SetKeywordGroups("People", "Locations", "Concepts");
+            Assert.AreEqual(_library.KeywordGroupsFormatted, new string[] { "People", "Locations", "Concepts" });
             Assert.AreEqual(_source2.GetKeywords("Locations"), new string[] { "Middle Earth", "The Shire" });
         }
     }

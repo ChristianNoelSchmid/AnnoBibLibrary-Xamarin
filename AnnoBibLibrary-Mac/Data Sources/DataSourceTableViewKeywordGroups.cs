@@ -6,7 +6,7 @@ namespace AnnoBibLibraryMac.DataSources
 {
     public class DataSourceTableViewKeywordGroups : NSTableViewDataSource
     {
-        public List<string> Keywords = new List<string>();
+        public List<Tuple<string, bool>> Keywords = new List<Tuple<string, bool>>();
 
         public override nint GetRowCount(NSTableView tableView)
         {
