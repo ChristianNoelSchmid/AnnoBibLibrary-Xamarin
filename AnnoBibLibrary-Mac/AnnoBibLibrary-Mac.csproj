@@ -83,15 +83,25 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="ViewController.cs" />
-    <Compile Include="ViewController.designer.cs">
-      <DependentUpon>ViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="Data Sources\DataSourceTableViewKeywordGroups.cs" />
     <Compile Include="Control Delegates\DelegateTableViewKeywordGroups.cs" />
+    <Compile Include="MainViewController.cs" />
+    <Compile Include="MainViewController.designer.cs">
+      <DependentUpon>MainViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PreferencesViewController.cs" />
+    <Compile Include="PreferencesViewController.designer.cs">
+      <DependentUpon>PreferencesViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AnnoBibLibrary-Shared\AnnoBibLibrary-Shared.csproj">
+      <Project>{1723F6CF-57FD-47BD-891D-7235142460A3}</Project>
+      <Name>AnnoBibLibrary-Shared</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
 </Project>
