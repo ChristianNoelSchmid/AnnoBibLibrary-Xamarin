@@ -10,44 +10,154 @@ using AnnoBibLibraryMac.ViewDelegates;
 
 namespace AnnoBibLibraryMac
 {
+    // View Controller for the Preferences window
+    // Controls the current open library's settings, allowing the user
+    // to adjust keyword groups, ..., and ...
 	public partial class PreferencesViewController : NSViewController
 	{
+        public PreferencesViewController(IntPtr handle) : base(handle) { }
+
         #region Properties
+        // The DataSource for the KeywordGroups - attaches to TableViewKeywordGroups
         private DataSourceTableViewKeywordGroups DataSourceKeywordGroups { get; set; }
+        // Reference to current Open Library
         private Library OpenLibrary { get; } = GlobalResources.OpenLibrary;
         #endregion
 
-        public PreferencesViewController (IntPtr handle) : base (handle)
-		{
-		}
-
+        #region Override Methods
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
 
             DataSourceKeywordGroups = new DataSourceTableViewKeywordGroups();
             foreach (string kwd in OpenLibrary.KeywordGroupsFormatted)
-                DataSourceKeywordGroups.Keywords.Add(new Tuple<string, bool>(kwd, false));
+                DataSourceKeywordGroups.Keywords.Add(
+                    new DataSourceTableViewKeywordGroupKeyword
+                    {
+                        GroupName = kwd,
+                        IsNew = false,
+                        IsDeleted = false
+                    }
+                );
 
             TableViewKeywordGroups.DataSource = DataSourceKeywordGroups;
             TableViewKeywordGroups.Delegate = new DelegateTableViewKeywordGroups(DataSourceKeywordGroups);
-        }
 
+            TableViewKeywordGroups.OnDeletePressed += (sender, e) =>
+            {
+                if(e.SelectedRow != -1)
+                {
+                    if (DataSourceKeywordGroups.Keywords[e.SelectedRow].IsDeleted)
+                    {
+                        DataSourceKeywordGroups.Keywords[e.SelectedRow].IsDeleted = false;
+                        TableViewKeywordGroups.ReloadData();
+                    }
+                    else
+                    {
+                        var alert = new NSAlert
+                        {
+                            AlertStyle = NSAlertStyle.Warning,
+                            MessageText = "Are you sure you wish to delete the selected keyword group?",
+                            InformativeText = "This will not delete the keyword group from the sources in the library.",
+                        };
+                        alert.AddButton("Yes");
+                        alert.AddButton("No");
+
+                        var choice = alert.RunModal();
+
+                        if (choice == 1000)
+                        {
+                            DataSourceKeywordGroups.Keywords[e.SelectedRow].IsDeleted = true;
+                            TableViewKeywordGroups.ReloadData();
+                        }
+                    }
+                }
+            };
+        }
+        #endregion
+
+        #region XCode methods
         partial void OnAddKeywordGroup(NSObject sender)
         {
-            DataSourceKeywordGroups.Keywords.Add(new Tuple<string, bool>("", true));
+            DataSourceKeywordGroups.Keywords.Add(
+                new DataSourceTableViewKeywordGroupKeyword
+                {
+                    GroupName = "",
+                    IsNew = true,
+                    IsDeleted = false,
+                }
+            );
             TableViewKeywordGroups.ReloadData();
         }
 
         partial void OnAccept(NSObject sender)
         {
+            if (!IsKeywordGroupingValid()) return;
+
+            for (int i = DataSourceKeywordGroups.Keywords.Count - 1; i >= 0; --i)
+            {
+                if (DataSourceKeywordGroups.Keywords[i].IsDeleted)
+                {
+                    OpenLibrary.RemoveKeywordGroup(DataSourceKeywordGroups.Keywords[i].GroupName);
+                    DataSourceKeywordGroups.Keywords.RemoveAt(i);
+                }
+            }
+
             string[] keywords = new string[DataSourceKeywordGroups.Keywords.Count];
 
             for (var i = 0; i < keywords.Length; ++i)
-                keywords[i] = DataSourceKeywordGroups.Keywords[i].Item1;
+                keywords[i] = DataSourceKeywordGroups.Keywords[i].GroupName;
 
             OpenLibrary.SetKeywordGroups(keywords);
             NSApplication.SharedApplication.KeyWindow.Close();
         }
+
+        partial void OnCancel(NSObject sender)
+        {
+            NSApplication.SharedApplication.KeyWindow.Close();
+        }
+        #endregion
+
+        #region Private Methods
+        private bool IsKeywordGroupingValid()
+        {
+            for (int i = 0; i < DataSourceKeywordGroups.Keywords.Count; ++i)
+            {
+                if (DataSourceKeywordGroups.Keywords[i].GroupName.Trim() == "" && !DataSourceKeywordGroups.Keywords[i].IsDeleted)
+                {
+                    DisplayCannotContinueAlert("Cannot have empty keyword group. Please enter one, or delete it.");
+                    return false;
+                }
+                else
+                {
+                    for (int j = 0; j < DataSourceKeywordGroups.Keywords.Count; ++j)
+                    {
+                        if (i == j) continue;
+                        if (DataSourceKeywordGroups.Keywords[i].GroupName.ToLower().Trim() ==
+                            DataSourceKeywordGroups.Keywords[j].GroupName.ToLower().Trim() &&
+                            !DataSourceKeywordGroups.Keywords[i].IsDeleted &&
+                            !DataSourceKeywordGroups.Keywords[j].IsDeleted)
+                        {
+                            DisplayCannotContinueAlert($"Cannot have repeated keyword group name: \"{DataSourceKeywordGroups.Keywords[i].GroupName}\".");
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private void DisplayCannotContinueAlert(string informativeText)
+        {
+            var alert = new NSAlert
+            {
+                AlertStyle = NSAlertStyle.Informational,
+                MessageText = "Cannot continue",
+                InformativeText = informativeText
+            };
+            alert.RunModal();
+        }
+        #endregion
     }
 }

@@ -42,7 +42,7 @@
                                     <rect key="frame" x="1" y="0.0" width="484" height="139"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="avJ-TR-oZQ" viewBased="YES" id="jAG-wb-xJd">
+                                        <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="avJ-TR-oZQ" viewBased="YES" id="jAG-wb-xJd" customClass="TableViewKeywordGroups">
                                             <rect key="frame" x="0.0" y="0.0" width="484" height="114"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
@@ -130,6 +130,9 @@
 Gw
 </string>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="OnCancel:" target="l3r-NA-k4I" id="hHr-PO-0GF"/>
+                                </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MPW-gh-7nP">
                                 <rect key="frame" x="307" y="6" width="83" height="32"/>
@@ -153,7 +156,7 @@ Gw
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="TableViewKeywordGroups" destination="jAG-wb-xJd" id="uDt-pb-Cdm"/>
+                        <outlet property="TableViewKeywordGroups" destination="jAG-wb-xJd" id="RRa-1v-OqG"/>
                     </connections>
                 </viewController>
                 <customObject id="AUb-ub-Wgq" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -835,7 +838,7 @@ Gw
                         <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <splitView arrangesAllSubviews="NO" dividerStyle="paneSplitter" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HVn-Ds-3O6">
+                            <splitView arrangesAllSubviews="NO" dividerStyle="paneSplitter" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HVn-Ds-3O6" customClass="MarginSplitView">
                                 <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
                                 <subviews>
                                     <customView id="pBm-fw-2RT">
@@ -1244,7 +1247,7 @@ Gw
                                     </customView>
                                 </subviews>
                                 <holdingPriorities>
-                                    <real value="250"/>
+                                    <real value="321"/>
                                     <real value="250"/>
                                 </holdingPriorities>
                             </splitView>
@@ -1256,6 +1259,9 @@ Gw
                             <constraint firstAttribute="trailing" secondItem="HVn-Ds-3O6" secondAttribute="trailing" id="ukc-hI-G9Q"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="SplitViewMain" destination="HVn-Ds-3O6" id="OLh-4X-Hsd"/>
+                    </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>

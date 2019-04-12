@@ -9,12 +9,18 @@ using System.CodeDom.Compiler;
 
 namespace AnnoBibLibraryMac
 {
-	[Register ("MainViewController")]
-	partial class MainViewController
-	{
-		
-		void ReleaseDesignerOutlets ()
-		{
-		}
-	}
+    [Register ("MainViewController")]
+    partial class MainViewController
+    {
+        [Outlet]
+        AnnoBibLibraryMac.MarginSplitView SplitViewMain { get; set; }
+        
+        void ReleaseDesignerOutlets ()
+        {
+            if (SplitViewMain != null) {
+                SplitViewMain.Dispose ();
+                SplitViewMain = null;
+            }
+        }
+    }
 }

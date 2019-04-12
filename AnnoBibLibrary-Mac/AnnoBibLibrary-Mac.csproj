@@ -74,6 +74,7 @@
     <Folder Include="Resources\" />
     <Folder Include="Data Sources\" />
     <Folder Include="Control Delegates\" />
+    <Folder Include="Custom Controls\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -93,6 +94,15 @@
     <Compile Include="PreferencesViewController.designer.cs">
       <DependentUpon>PreferencesViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Custom Controls\MarginSplitView.cs" />
+    <Compile Include="Custom Controls\MarginSplitView.designer.cs">
+      <DependentUpon>..\MarginSplitView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Custom Controls\TableViewKeywordGroups.cs" />
+    <Compile Include="Custom Controls\TableViewKeywordGroups.designer.cs">
+      <DependentUpon>TableViewKeywordGroups.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Custom Controls\EditableTextView.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />
