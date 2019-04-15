@@ -75,6 +75,7 @@
     <Folder Include="Data Sources\" />
     <Folder Include="Control Delegates\" />
     <Folder Include="Custom Controls\" />
+    <Folder Include="ViewControllers\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -86,14 +87,6 @@
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Data Sources\DataSourceTableViewKeywordGroups.cs" />
     <Compile Include="Control Delegates\DelegateTableViewKeywordGroups.cs" />
-    <Compile Include="MainViewController.cs" />
-    <Compile Include="MainViewController.designer.cs">
-      <DependentUpon>MainViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PreferencesViewController.cs" />
-    <Compile Include="PreferencesViewController.designer.cs">
-      <DependentUpon>PreferencesViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="Custom Controls\MarginSplitView.cs" />
     <Compile Include="Custom Controls\MarginSplitView.designer.cs">
       <DependentUpon>..\MarginSplitView.cs</DependentUpon>
@@ -103,6 +96,20 @@
       <DependentUpon>TableViewKeywordGroups.cs</DependentUpon>
     </Compile>
     <Compile Include="Custom Controls\EditableTextView.cs" />
+    <Compile Include="ViewControllers\MainViewController.cs" />
+    <Compile Include="ViewControllers\MainViewController.designer.cs">
+      <DependentUpon>MainViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\NewSourceViewController.cs" />
+    <Compile Include="ViewControllers\NewSourceViewController.designer.cs">
+      <DependentUpon>NewSourceViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\PreferencesViewController.cs" />
+    <Compile Include="ViewControllers\PreferencesViewController.designer.cs">
+      <DependentUpon>PreferencesViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Data Sources\DataSourceOutlineViewSourceFields.cs" />
+    <Compile Include="Control Delegates\DelegateOutlineViewSourceFields.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />

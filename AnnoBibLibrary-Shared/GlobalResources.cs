@@ -55,6 +55,14 @@ namespace AnnoBibLibrary.Shared
             ebookFormat.AddField("Publish Year", typeof(NumberField), false);
 
             CitationFormats.Add("ebook", printFormat);
+
+            CitationFormat websiteFormat = new CitationFormat("Website");
+            websiteFormat.AddField("Author", typeof(NameField), true);
+            websiteFormat.AddField("URL", typeof(WordField), false);
+            websiteFormat.AddField("Date Accessed", typeof(DateField), false);
+
+            CitationFormats.Add("website", websiteFormat);
+
         }
 
         public static void CreateInitialDirectories()

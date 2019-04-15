@@ -10,6 +10,7 @@ namespace AnnoBibLibraryMac.ViewDelegates
     public class DelegateTableViewKeywordGroups : NSTableViewDelegate
     {
         private const string CellIdentifier = "KeywordGroups";
+        private readonly NSImage DeletedImage = NSImage.ImageNamed("NSRemoveTemplate");
 
         private DataSourceTableViewKeywordGroups _dataSource;
 
@@ -40,7 +41,7 @@ namespace AnnoBibLibraryMac.ViewDelegates
             }
 
             view.StringValue = string.Format("{0}{1}",
-                _dataSource.Keywords[(int)row].IsDeleted ? "<DELETED>" : "",
+                _dataSource.Keywords[(int)row].IsDeleted ? ">> DELETED << " : "",
                 _dataSource.Keywords[(int)row].GroupName);
 
             return view;

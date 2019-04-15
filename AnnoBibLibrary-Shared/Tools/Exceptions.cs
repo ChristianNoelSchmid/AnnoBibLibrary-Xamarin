@@ -35,4 +35,9 @@ namespace AnnoBibLibrary.Shared
     {
         public FieldValueTypeMismatch(string msg) : base(msg) { }
     }
+
+    class IOLibraryAlreadyExistsException : Exception
+    {
+        public IOLibraryAlreadyExistsException(string msg) : base(msg) { }
+    }
 }

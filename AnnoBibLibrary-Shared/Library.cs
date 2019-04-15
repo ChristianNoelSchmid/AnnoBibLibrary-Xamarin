@@ -83,6 +83,8 @@ namespace AnnoBibLibrary.Shared
             // At the end, when all is said and done, sort the list
             KeywordGroups.Sort();
 
+            Save(GlobalResources.LibrariesDirectory, true);
+
             return true;
         }
 
@@ -133,8 +135,11 @@ namespace AnnoBibLibrary.Shared
             }
         }
 
-        public bool Save(string directory)
+        public bool Save(string directory, bool overwrite)
         {
+            if (File.Exists(Path.Combine(directory, $"{Name}.able")) && !overwrite)
+                throw new IOLibraryAlreadyExistsException("Library already exists");
+
             using (StreamWriter writer = new StreamWriter(Path.Combine(directory, $"{Name}.abl")))
             {
                 JsonSerializerSettings settings = new JsonSerializerSettings { Formatting = Formatting.Indented };
