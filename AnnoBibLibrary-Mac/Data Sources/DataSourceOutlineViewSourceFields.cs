@@ -75,10 +75,9 @@ namespace AnnoBibLibraryMac.DataSources
         public void AddEmptyFieldValue()
         {
             FieldGroupParent = this;
-            Fields.Insert(0, new DataSourceOutlineViewSourceFieldsInfo(this));
 
-            if (FieldInfo.Value.Item1 == typeof(DateField)) Fields[0].Value = DateTime.Now;
-            else Fields[0].Value = "";
+            Fields.Insert(0, new DataSourceOutlineViewSourceFieldsInfo(this));
+            Fields[0].Value = "";
 
             Fields[0].Fields = null;
         }
@@ -93,7 +92,7 @@ namespace AnnoBibLibraryMac.DataSources
         public DataSourceOutlineViewSourceFieldsInfo FieldGroupParent { get; set; }
         public DataSourceOutlineViewSourceFieldsCellType CellType { get; set; }
 
-        public IComparable Value;
+        public string Value { get; set; }
         public List<DataSourceOutlineViewSourceFieldsInfo> Fields { get; set; }
 
         public bool IsExpandable => CellType == DataSourceOutlineViewSourceFieldsCellType.FieldGroup &&
@@ -106,4 +105,7 @@ namespace AnnoBibLibraryMac.DataSources
         Value,
         AddNew
     }
+
+  
 }
+

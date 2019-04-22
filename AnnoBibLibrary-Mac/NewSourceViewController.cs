@@ -31,9 +31,10 @@ namespace AnnoBibLibraryMac
 
             ComboBoxFormats.Add(citationValues);
 
-            OutlineViewSourceFields.DataSource = DataSource;
-            OutlineViewSourceFields.Delegate = new DelegateOutlineViewSourceFields(DataSource);
+            OutlineViewNewSourceFields.DataSource = DataSource;
+            OutlineViewNewSourceFields.Delegate = new DelegateOutlineViewSourceFields(DataSource);
 
+            ComboBoxFormats.StringValue = "Print";
             FormatSourceFields(GlobalResources.GetFormat("Print"));
         }
 
@@ -68,7 +69,7 @@ namespace AnnoBibLibraryMac
                 }
             }
 
-            OutlineViewSourceFields.ReloadData();
+            OutlineViewNewSourceFields.ReloadData();
         }
         #endregion
     }

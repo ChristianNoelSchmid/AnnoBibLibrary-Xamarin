@@ -100,16 +100,15 @@
     <Compile Include="ViewControllers\MainViewController.designer.cs">
       <DependentUpon>MainViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewControllers\NewSourceViewController.cs" />
-    <Compile Include="ViewControllers\NewSourceViewController.designer.cs">
-      <DependentUpon>NewSourceViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="ViewControllers\PreferencesViewController.cs" />
     <Compile Include="ViewControllers\PreferencesViewController.designer.cs">
       <DependentUpon>PreferencesViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Data Sources\DataSourceOutlineViewSourceFields.cs" />
     <Compile Include="Control Delegates\DelegateOutlineViewSourceFields.cs" />
+    <Compile Include="Custom Controls\EditableDatePicker.cs" />
+    <Compile Include="NewSourceViewController.cs" />
+    <Compile Include="NewSourceViewController.designer.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />
