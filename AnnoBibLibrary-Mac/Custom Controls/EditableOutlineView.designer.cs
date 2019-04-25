@@ -9,12 +9,12 @@ using System.CodeDom.Compiler;
 
 namespace AnnoBibLibraryMac
 {
-    [Register ("MainViewController")]
-    partial class MainViewController
-    {
-        void ReleaseDesignerOutlets ()
-        {
-        
-}
-    }
+	[Register ("EditableOutlineView")]
+	partial class EditableOutlineView
+	{
+		
+		void ReleaseDesignerOutlets ()
+		{
+		}
+	}
 }

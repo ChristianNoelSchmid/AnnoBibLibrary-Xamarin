@@ -8,9 +8,13 @@ namespace AnnoBibLibraryMac.CustomControls
     // that toggle a boolean if the text field is actively being
     // edited. Used for deletable fields - does not allow deletion
     // while being edited (by pressing Delete button)
-    public class EditableTextView : NSTextField
+    public class EditableTextView : NSTextField, IEditableView
     {
         public bool IsBeingEdited { get; private set; } = false;
+
+        public EventHandler OnDeletePressed { get; set; }
+
+        public bool CanBeDeleted => true;
 
         public override void DidEndEditing(NSNotification notification)
         {
@@ -22,6 +26,17 @@ namespace AnnoBibLibraryMac.CustomControls
         {
             base.DidBeginEditing(notification);
             IsBeingEdited = true;
+        }
+
+        public override void KeyDown(NSEvent theEvent)
+        {
+            base.KeyDown(theEvent);
+
+            if (theEvent.KeyCode == (int)NSKey.Delete)
+            {
+                if (IsBeingEdited) return;
+                OnDeletePressed(this, null);
+            }
         }
     }
 }

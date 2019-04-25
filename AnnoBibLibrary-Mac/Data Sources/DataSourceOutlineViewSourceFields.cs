@@ -45,7 +45,7 @@ namespace AnnoBibLibraryMac.DataSources
     // the main dividers for the OutlineView, and will simply list the FieldName. 
     public class DataSourceOutlineViewSourceFieldsInfo : NSObject
     {
-        public DataSourceOutlineViewSourceFieldsInfo(KeyValuePair<string, Tuple<Type, bool>> fieldInfo)
+        public DataSourceOutlineViewSourceFieldsInfo(FieldInfo fieldInfo)
         {
             FieldGroupParent = null;
             FieldInfo = fieldInfo;
@@ -55,7 +55,7 @@ namespace AnnoBibLibraryMac.DataSources
 
             // If the Field does not allow multiple, it will require a default value to be able
             // to be retrieved by the OutlineView, by the way in which it is drawn
-            if (!FieldInfo.Value.Item2)
+            if (!FieldInfo.AllowMultiple)
                 AddEmptyFieldValue();
 
             else
@@ -88,15 +88,35 @@ namespace AnnoBibLibraryMac.DataSources
             Fields[Fields.Count - 1].CellType = DataSourceOutlineViewSourceFieldsCellType.AddNew;
         }
 
-        public KeyValuePair<string, Tuple<Type, bool>> FieldInfo;
+        public FieldInfo FieldInfo;
         public DataSourceOutlineViewSourceFieldsInfo FieldGroupParent { get; set; }
         public DataSourceOutlineViewSourceFieldsCellType CellType { get; set; }
 
-        public string Value { get; set; }
+        private IComparable value;
+        public IComparable Value
+        {
+            get => value;
+            set
+            {
+                if ((FieldInfo.GetType() == typeof(NameField) || FieldInfo.GetType() == typeof(WordField))
+                    && !(value is string))
+                    value = "";
+
+                else if (FieldInfo.GetType() == typeof(NumberField) && !(value is int))
+                    value = -1;
+
+                else if (FieldInfo.GetType() == typeof(DateField) && !(value is DateTime))
+                    value = DateTime.Now;
+
+                this.value = value;
+            }
+        }
+
         public List<DataSourceOutlineViewSourceFieldsInfo> Fields { get; set; }
 
-        public bool IsExpandable => CellType == DataSourceOutlineViewSourceFieldsCellType.FieldGroup &&
-            FieldInfo.Value.Item2;
+        public bool IsExpandable => 
+            CellType == DataSourceOutlineViewSourceFieldsCellType.FieldGroup
+            && FieldInfo.AllowMultiple;
     }
 
     public enum DataSourceOutlineViewSourceFieldsCellType

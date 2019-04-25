@@ -15,7 +15,7 @@ namespace AnnoBibLibrary.Shared.Bibliography
         // The Dictionary of all the Fields associated with the CitationFormat. The key holds the name of
         // the Field, while the Tuple holds the Type (ie. WordField, NumberField) and whether or not the
         // Field allows multiple values (bool)
-        public Dictionary<string, Tuple<Type, bool>> Fields { get; private set; } = new Dictionary<string, Tuple<Type, bool>>();
+        public List<FieldInfo> Fields { get; private set; } = new List<FieldInfo>();
 
         public CitationFormat(string name)
         {
@@ -30,19 +30,34 @@ namespace AnnoBibLibrary.Shared.Bibliography
             "[if Editor Name] ed. [Editor Name|spacer=\", \"|last=\" and \"] " +
             "[endif]. {Title: italics}. {Publisher City}: {Publisher Name:italics}, " +
             "{Publisher Year}. {Citation Format Name}";
-        
+
         // Adds a new Field to the CitationFormat, formatting it as it's added
         // Adds specific type (for now, either string or int) to specify what kind of
         // Field it is
         // Throws FormatException if fieldName is empty, or if the key already exists in the CitationFormat
         public void AddField(string fieldName, Type type, bool allowMultiple)
         {
-            if (fieldName == null || fieldName == "") throw new FormatException("New field cannot be null or empty.");
+            if (string.IsNullOrEmpty(fieldName)) throw new FormatException("New field cannot be null or empty.");
 
-            else if (Fields.ContainsKey(fieldName.ToLower()))
-                throw new FormatException($"Key \"{fieldName}\" already defined in CitationFormat \"{Name}\".");
+            Fields.ForEach((field) =>
+            {
+                if (field.Name == fieldName.ToLower().Trim())
+                    throw new FormatException($"Key \"{fieldName}\" already defined in CitationFormat \"{Name}\".");
+            });
+        
 
-            Fields.Add(fieldName.ToLower(), new Tuple<Type, bool>(type, allowMultiple));
+            Fields.Add(new FieldInfo {
+                Name = fieldName,
+                FieldType = type,
+                AllowMultiple = allowMultiple
+            });
         }
+    }
+
+    public struct FieldInfo
+    {
+        public string Name;
+        public Type FieldType;
+        public bool AllowMultiple;
     }
 }

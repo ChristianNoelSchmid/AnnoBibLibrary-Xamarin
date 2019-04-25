@@ -37,7 +37,7 @@ namespace AnnoBibLibraryMac.ControlDelegates
 
             else if (field.CellType == DataSourceOutlineViewSourceFieldsCellType.FieldGroup)
             {
-                view = CreateFieldGroupView(field);
+                view = CreateFieldGroupView(field, outlineView);
             }
 
             else
@@ -45,7 +45,7 @@ namespace AnnoBibLibraryMac.ControlDelegates
                 view = CreateValueView(field);
             }
                 
-            view.Identifier = RowNames[field.FieldInfo.Value.Item1];
+            view.Identifier = RowNames[field.FieldInfo.FieldType];
 
             return view;
 
@@ -72,66 +72,35 @@ namespace AnnoBibLibraryMac.ControlDelegates
             return button;
         }
 
-        private NSView CreateFieldGroupView(DataSourceOutlineViewSourceFieldsInfo field)
+        private NSView CreateFieldGroupView(DataSourceOutlineViewSourceFieldsInfo field, NSOutlineView outlineView)
         {
-            NSView view = null;
+            NSView view;
 
             if (!field.IsExpandable)
             {
-                view = new NSSplitView
+                if (field.FieldInfo.FieldType == typeof(DateField))
                 {
-                    IsVertical = true,
-                    DividerStyle = NSSplitViewDividerStyle.Thin,
-                };
+                    view = new EditableLabelAndDatePicker(field.FieldInfo.Name);
+                    var datePicker = (EditableDatePicker)view.Subviews[1];
 
-                var splitView = view as NSSplitView;
-
-                splitView.AddSubview(
-                    new NSTextField
-                    {
-                        Selectable = false,
-                        Editable = false,
-                        Bordered = false,
-                        StringValue = field.FieldInfo.Key,
-                    }
-                );
-
-                if (field.FieldInfo.Value.Item1 == typeof(DateField))
-                {
-                    splitView.AddSubview(
-                        new NSDatePicker
-                        {
-                            DatePickerStyle = NSDatePickerStyle.TextField,
-                            DateValue = (NSDate)(DateTime.TryParse(field.Fields[0].Value, out DateTime parsedDate) ? parsedDate : DateTime.Now),
-                            DatePickerElements = NSDatePickerElementFlags.YearMonthDateDay
-                        }
-                    );
-
-                    var dateField = splitView.Subviews[1] as NSDatePicker;
-                    dateField.ValidateProposedDateValue += (sender, e) => field.Fields[0].Value = ((DateTime)dateField.DateValue).ToLocalTime().ToString();
+                    datePicker.ValidateProposedDateValue += (sender, e) => field.Fields[0].Value = ((DateTime)datePicker.DateValue).ToLocalTime();
                 }
 
                 else
                 {
-                    splitView.AddSubview(
-                        new EditableTextView
-                        {
-                            Selectable = true,
-                            Editable = true,
-                            Bordered = false,
-                            StringValue = field.Fields[0].Value,
-                            PlaceholderString = $"New {field.FieldInfo.Key}",
-                        }
-                    );
+                    view = new EditableLabelAndTextFieldView(field.FieldInfo.Name, field.Fields[0].Value.ToString());
+                    var textField = view.Subviews[1] as NSTextField;
 
-                    var textField = splitView.Subviews[1] as NSTextField;
-
-                    textField.EditingEnded += (sender, e) => field.Fields[0].Value = textField.StringValue;
-                    if (field.FieldInfo.Value.Item1 == typeof(NumberField))
+                    if (field.FieldInfo.FieldType == typeof(NumberField))
+                    {
                         textField.Formatter = new NSNumberFormatter();
+                        textField.EditingEnded += (sender, e) => field.Fields[0].Value = int.Parse(textField.StringValue);
+                    }
+                    else
+                        textField.EditingEnded += (sender, e) => field.Fields[0].Value = textField.StringValue;
                 }
 
-                splitView.SetHoldingPriority(500, 0);
+                (view as NSSplitView).SetHoldingPriority(500, 0);
             }
             else
             {
@@ -140,7 +109,7 @@ namespace AnnoBibLibraryMac.ControlDelegates
                     Selectable = false,
                     Editable = false,
                     Bordered = false,
-                    StringValue = field.FieldInfo.Key,
+                    StringValue = field.FieldInfo.Name,
                 };
             }
 
@@ -151,18 +120,17 @@ namespace AnnoBibLibraryMac.ControlDelegates
         {
             NSView view = null;
 
-            Type fieldType = field.FieldInfo.Value.Item1;
-            if (field.FieldInfo.Value.Item1 == typeof(DateField))
+            Type fieldType = field.FieldInfo.FieldType;
+            if (fieldType == typeof(DateField))
             {
                 view = new NSDatePicker
                 {
                     DatePickerStyle = NSDatePickerStyle.TextField,
-                    DateValue = (NSDate)(DateTime.TryParse(field.Value, out DateTime parsedDate) ? parsedDate : DateTime.Now),
                     DatePickerElements = NSDatePickerElementFlags.YearMonthDateDay
                 };
 
                 var dateField = view as NSDatePicker;
-                dateField.ValidateProposedDateValue += (sender, e) => field.Fields[0].Value = ((DateTime)dateField.DateValue).ToLocalTime().ToString();
+                dateField.ValidateProposedDateValue += (sender, e) => field.Fields[0].Value = ((DateTime)dateField.DateValue).ToLocalTime();
             }
             else
             {
@@ -171,14 +139,14 @@ namespace AnnoBibLibraryMac.ControlDelegates
                     Selectable = true,
                     Editable = true,
                     Bordered = false,
-                    PlaceholderString = $"New {field.FieldInfo.Key}"
+                    PlaceholderString = $"New {field.FieldInfo.Name}"
                 };
 
                 var textField = view as NSTextField;
                 if (fieldType == typeof(NumberField))
                     textField.Formatter = new NSNumberFormatter();
 
-                textField.StringValue = field.Value;
+                textField.StringValue = field.Value.ToString();
 
                 textField.EditingEnded += (sender, e) =>
                     field.Value = textField.StringValue;

@@ -87,10 +87,6 @@
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Data Sources\DataSourceTableViewKeywordGroups.cs" />
     <Compile Include="Control Delegates\DelegateTableViewKeywordGroups.cs" />
-    <Compile Include="Custom Controls\MarginSplitView.cs" />
-    <Compile Include="Custom Controls\MarginSplitView.designer.cs">
-      <DependentUpon>..\MarginSplitView.cs</DependentUpon>
-    </Compile>
     <Compile Include="Custom Controls\TableViewKeywordGroups.cs" />
     <Compile Include="Custom Controls\TableViewKeywordGroups.designer.cs">
       <DependentUpon>TableViewKeywordGroups.cs</DependentUpon>
@@ -107,8 +103,16 @@
     <Compile Include="Data Sources\DataSourceOutlineViewSourceFields.cs" />
     <Compile Include="Control Delegates\DelegateOutlineViewSourceFields.cs" />
     <Compile Include="Custom Controls\EditableDatePicker.cs" />
-    <Compile Include="NewSourceViewController.cs" />
-    <Compile Include="NewSourceViewController.designer.cs" />
+    <Compile Include="ViewControllers\NewSourceViewController.cs" />
+    <Compile Include="ViewControllers\NewSourceViewController.designer.cs" />
+    <Compile Include="Custom Controls\IEditableView.cs" />
+    <Compile Include="Custom Controls\EditableLabelAndTextFieldView.cs" />
+    <Compile Include="Custom Controls\EditableLabelAndDatePicker.cs" />
+    <Compile Include="Custom Controls\EditableLabelAndMultimedia.cs" />
+    <Compile Include="Custom Controls\EditableOutlineView.cs" />
+    <Compile Include="Custom Controls\EditableOutlineView.designer.cs">
+      <DependentUpon>EditableOutlineView.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />

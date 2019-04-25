@@ -75,10 +75,13 @@ namespace AnnoBibLibrary.Shared.Fields
 
         public static Field operator +(Field field, IComparable value)
         {
-            if (field.ValueType != value.GetType())
-                throw new InvalidOperationException($"Cannot add a {value.GetType()} type to a field of type {field.GetType()}.");
+            if (value != null)
+            {
+                if (field.ValueType != value.GetType())
+                    throw new InvalidOperationException($"Cannot add a {value.GetType()} type to a field of type {field.GetType()}.");
 
-            field.Values.Add(value);
+                field.Values.Add(value);
+            }
             return field;
         }
 
@@ -88,7 +91,7 @@ namespace AnnoBibLibrary.Shared.Fields
         {
             Values.Clear();
 
-            if (values == null || values.Length == 0) 
+            if (values == null || values[0] == null || values.Length == 0) 
                 return;
 
             if (ValueType != values[0].GetType())

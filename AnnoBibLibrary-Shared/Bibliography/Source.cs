@@ -20,19 +20,19 @@ namespace AnnoBibLibrary.Shared.Bibliography
         public Source(CitationFormat citationFormat)
         {
             CitationFormatName = citationFormat.Name;
-            foreach (var key in citationFormat.Fields.Keys)
+            foreach (var field in citationFormat.Fields)
             {
-                if (citationFormat.Fields[key].Item1 == typeof(NameField))
-                    fields.Add(key, new NameField(key, citationFormat.Fields[key].Item2));
+                if (field.FieldType == typeof(NameField))
+                    fields.Add(field.Name, new NameField(field.Name, field.AllowMultiple));
 
-                else if (citationFormat.Fields[key].Item1 == typeof(WordField))
-                    fields.Add(key, new WordField(key, citationFormat.Fields[key].Item2));
+                if (field.FieldType == typeof(WordField))
+                    fields.Add(field.Name, new WordField(field.Name, field.AllowMultiple));
 
-                else if (citationFormat.Fields[key].Item1 == typeof(NumberField))
-                    fields.Add(key, new NumberField(key, citationFormat.Fields[key].Item2));
+                if (field.FieldType == typeof(NumberField))
+                    fields.Add(field.Name, new NumberField(field.Name, field.AllowMultiple));
 
-                else
-                    fields.Add(key, new DateField(key, citationFormat.Fields[key].Item2));
+                if (field.FieldType == typeof(DateField))
+                    fields.Add(field.Name, new DateField(field.Name, field.AllowMultiple));
             }
         }
 
@@ -149,13 +149,13 @@ namespace AnnoBibLibrary.Shared.Bibliography
         {
             get
             {
-                key = key.ToLower();
+                key = key.ToLower().Trim();
                 if (fields.ContainsKey(key)) return fields[key];
                 else return null;
             }
             set
             {
-                key = key.ToLower();
+                key = key.ToLower().Trim();
                 if (fields.ContainsKey(key))
                 {
                     if (value is IComparable comp)
@@ -185,6 +185,21 @@ namespace AnnoBibLibrary.Shared.Bibliography
 
                 return keys;
             }
+        }
+
+        public void SetValues(string fieldName, params IComparable[] values)
+        {
+            fieldName = fieldName.ToLower().Trim();
+            foreach(var field in Fields)
+            {
+                if (field.FieldName.ToLower().Trim() == fieldName.ToLower().Trim())
+                {
+                    field.SetValues(values);
+                    return;
+                }
+            }
+
+            throw new FieldNotFoundException("");
         }
         /* ************************************************
          * ************************************************

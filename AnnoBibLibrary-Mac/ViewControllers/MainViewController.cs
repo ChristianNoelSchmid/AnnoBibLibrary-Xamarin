@@ -16,9 +16,6 @@ namespace AnnoBibLibraryMac
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-
-            SplitViewMain.LeftMargin = 50f;
-            SplitViewMain.RightMargin = 0.25f;
-        }
+}
     }
 }
