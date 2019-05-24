@@ -73,25 +73,13 @@ namespace AnnoBibLibrary.Shared.Fields
         [JsonProperty]
         protected List<IComparable> Values { get; set; }
 
-        public static Field operator +(Field field, IComparable value)
-        {
-            if (value != null)
-            {
-                if (field.ValueType != value.GetType())
-                    throw new InvalidOperationException($"Cannot add a {value.GetType()} type to a field of type {field.GetType()}.");
-
-                field.Values.Add(value);
-            }
-            return field;
-        }
-
         // Adds a value to the Field collection, checking the field type
         // before adding (using fieldType)
         public virtual void SetValues(params IComparable[] values)
         {
             Values.Clear();
 
-            if (values == null || values[0] == null || values.Length == 0) 
+            if (values == null || values.Length == 0 || values[0] == null)
                 return;
 
             if (ValueType != values[0].GetType())

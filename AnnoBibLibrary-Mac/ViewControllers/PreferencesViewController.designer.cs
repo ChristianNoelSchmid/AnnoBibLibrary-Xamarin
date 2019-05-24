@@ -9,27 +9,27 @@ using System.CodeDom.Compiler;
 
 namespace AnnoBibLibraryMac
 {
-	[Register ("PreferencesViewController")]
-	partial class PreferencesViewController
-	{
-		[Outlet]
-		AnnoBibLibraryMac.TableViewKeywordGroups TableViewKeywordGroups { get; set; }
+    [Register ("PreferencesViewController")]
+    partial class PreferencesViewController
+    {
+        [Outlet]
+        AnnoBibLibraryMac.TableViewKeywordGroups TableViewKeywordGroups { get; set; }
 
-		[Action ("OnAccept:")]
-		partial void OnAccept (Foundation.NSObject sender);
+        [Action ("OnAccept:")]
+        partial void OnAccept (Foundation.NSObject sender);
 
-		[Action ("OnAddKeywordGroup:")]
-		partial void OnAddKeywordGroup (Foundation.NSObject sender);
+        [Action ("OnAddKeywordGroup:")]
+        partial void OnAddKeywordGroup (Foundation.NSObject sender);
 
-		[Action ("OnCancel:")]
-		partial void OnCancel (Foundation.NSObject sender);
-		
-		void ReleaseDesignerOutlets ()
-		{
-			if (TableViewKeywordGroups != null) {
-				TableViewKeywordGroups.Dispose ();
-				TableViewKeywordGroups = null;
-			}
-		}
-	}
+        [Action ("OnCancel:")]
+        partial void OnCancel (Foundation.NSObject sender);
+        
+        void ReleaseDesignerOutlets ()
+        {
+            if (TableViewKeywordGroups != null) {
+                TableViewKeywordGroups.Dispose ();
+                TableViewKeywordGroups = null;
+            }
+        }
+    }
 }

@@ -9,10 +9,11 @@ namespace AnnoBibLibrary.Tests
     [TestFixture]
     public class LibraryTests
     {
-        private readonly Library _library;
-        private readonly Source  _source1, _source2;
-    
-        public LibraryTests()
+        private Library _library;
+        private Source  _source1, _source2;
+   
+        [TestFixtureSetUp] 
+        public void SetUpLibraryTests()
         {
             GlobalResources.Initialize();
 

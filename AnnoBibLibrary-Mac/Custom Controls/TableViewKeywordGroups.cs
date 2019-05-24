@@ -14,11 +14,11 @@ namespace AnnoBibLibraryMac
         public int SelectedRow { get; }
     }
 
-	public partial class TableViewKeywordGroups : NSTableView
-	{
-		public TableViewKeywordGroups (IntPtr handle) : base (handle)
-		{
-		}
+    public partial class TableViewKeywordGroups : NSTableView
+    {
+        public TableViewKeywordGroups (IntPtr handle) : base (handle)
+        {
+        }
 
         public EventHandler<DeletePressedEventArgs> OnDeletePressed { get; set; }
 
@@ -28,7 +28,8 @@ namespace AnnoBibLibraryMac
 
             if(theEvent.KeyCode == (int)NSKey.Delete)
             {
-                if(((EditableTextView)GetView(0, SelectedRow, false)).IsBeingEdited)
+                IEditableView view = (IEditableView)GetView(0, SelectedRow, false);
+                if(!view.CanBeDeleted || view.IsBeingEdited)
                     return;
 
                 OnDeletePressed(this, new DeletePressedEventArgs((int)this.SelectedRow));

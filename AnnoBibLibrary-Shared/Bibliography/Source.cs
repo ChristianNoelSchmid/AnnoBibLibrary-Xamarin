@@ -23,16 +23,16 @@ namespace AnnoBibLibrary.Shared.Bibliography
             foreach (var field in citationFormat.Fields)
             {
                 if (field.FieldType == typeof(NameField))
-                    fields.Add(field.Name, new NameField(field.Name, field.AllowMultiple));
+                    Fields.Add(field.Name, new NameField(field.Name, field.AllowMultiple));
 
                 if (field.FieldType == typeof(WordField))
-                    fields.Add(field.Name, new WordField(field.Name, field.AllowMultiple));
+                    Fields.Add(field.Name, new WordField(field.Name, field.AllowMultiple));
 
                 if (field.FieldType == typeof(NumberField))
-                    fields.Add(field.Name, new NumberField(field.Name, field.AllowMultiple));
+                    Fields.Add(field.Name, new NumberField(field.Name, field.AllowMultiple));
 
                 if (field.FieldType == typeof(DateField))
-                    fields.Add(field.Name, new DateField(field.Name, field.AllowMultiple));
+                    Fields.Add(field.Name, new DateField(field.Name, field.AllowMultiple));
             }
         }
 
@@ -46,7 +46,7 @@ namespace AnnoBibLibrary.Shared.Bibliography
             Quotes = quotes;
             CitationFormatName = citationFormatName;
 
-            this.fields = fields;
+            this.Fields = fields;
         }
 
         // The Source's Notes, user-specific
@@ -84,8 +84,7 @@ namespace AnnoBibLibrary.Shared.Bibliography
         // Dictionary storage of all Fields. This is the collection that will be
         // retrieved from and manipulated by the client.
         [JsonProperty]
-        private Dictionary<string, Field> fields = new Dictionary<string, Field>();
-        public List<Field> Fields => fields.Values.ToList();
+        public Dictionary<string, Field> Fields { get; private set; } = new Dictionary<string, Field>();
 
         /* *************************************************
          * Common Fields that will, generally, be universal to all CitationFormats
@@ -96,7 +95,7 @@ namespace AnnoBibLibrary.Shared.Bibliography
         public string TitleFormatted {
             get
             {
-                var field = this["title"];
+                var field = GetField("title");
                 if (field == null || field.FormattedValues.Length == 0) return ">> Unknown Source <<";
 
                 else
@@ -109,7 +108,7 @@ namespace AnnoBibLibrary.Shared.Bibliography
         {
             get
             {
-                var authorField = this["author"];
+                var authorField = GetField("author");
 
                 if (authorField == null || authorField.FormattedValues.Length == 0) return ">> Unknown Author <<";
 
@@ -121,7 +120,7 @@ namespace AnnoBibLibrary.Shared.Bibliography
         {
             get
             {
-                var publisherField = this["publisher"];
+                var publisherField = GetField("publisher");
 
                 if (publisherField == null || publisherField.FormattedValues.Length == 0) return ">> Unknown Publisher <<";
 
@@ -133,7 +132,7 @@ namespace AnnoBibLibrary.Shared.Bibliography
         {
             get
             {
-                var publishYearFormatted = this["publish year"];
+                var publishYearFormatted = GetField("publish year");
 
                 if (publishYearFormatted == null || publishYearFormatted.FormattedValues.Length == 0) return ">> Unknown Publish Date <<";
 
@@ -142,42 +141,17 @@ namespace AnnoBibLibrary.Shared.Bibliography
         }
         /* **************************************************
          */
-        // Retrieves a Field from the Source Fields. Requires Field type in order to
-        // correctly convert
-
-        public Field this[string key]
-        {
-            get
-            {
-                key = key.ToLower().Trim();
-                if (fields.ContainsKey(key)) return fields[key];
-                else return null;
-            }
-            set
-            {
-                key = key.ToLower().Trim();
-                if (fields.ContainsKey(key))
-                {
-                    if (value is IComparable comp)
-                    {
-                        fields[key] += comp;
-                        return;
-                    }
-                }
-                throw new FieldNotFoundException("Field not found, and cannot be added to.");
-            }
-        }
-
+       
         // Converts all keys in the _fields dictionary into an array,
         // Capitalizing each key as it's added
         public string[] FieldNamesFormatted
         {
             get
             {
-                string[] keys = new string[fields.Count];
+                string[] keys = new string[Fields.Count];
                 int counter = 0;
 
-                foreach (var key in fields.Keys)
+                foreach (var key in Fields.Keys)
                 {
                     keys[counter] = Tools.Capitalize(key);
                     ++counter;
@@ -187,19 +161,19 @@ namespace AnnoBibLibrary.Shared.Bibliography
             }
         }
 
-        public void SetValues(string fieldName, params IComparable[] values)
+        public Field GetField(string fieldName)
         {
-            fieldName = fieldName.ToLower().Trim();
-            foreach(var field in Fields)
+            if (fieldName != null)
             {
-                if (field.FieldName.ToLower().Trim() == fieldName.ToLower().Trim())
+                fieldName = fieldName.ToLower().Trim();
+                foreach (string key in Fields.Keys)
                 {
-                    field.SetValues(values);
-                    return;
+                    if (fieldName == key.ToLower().Trim())
+                        return Fields[key];
                 }
             }
 
-            throw new FieldNotFoundException("");
+            return null;
         }
         /* ************************************************
          * ************************************************
@@ -327,5 +301,33 @@ namespace AnnoBibLibrary.Shared.Bibliography
             }
         }
 
+        public bool KeywordGroupContains(string keywordGroup, string value)
+        {
+            if (Keywords.ContainsKey(keywordGroup))
+            {
+                foreach (var kwd in Keywords[keywordGroup])
+                {
+                    if (kwd.ToLower().Contains(value.Trim().ToLower()))
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool KeywordGroupContainsRange(string keywordGroup, string lower, string upper)
+        {
+            if (Keywords.ContainsKey(keywordGroup))
+            {
+                foreach (var kwd in Keywords[keywordGroup])
+                {
+                    if (string.Compare(kwd, lower, StringComparison.Ordinal) >= 0 
+                     && string.Compare(kwd, lower, StringComparison.Ordinal) <= 0)
+                        return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

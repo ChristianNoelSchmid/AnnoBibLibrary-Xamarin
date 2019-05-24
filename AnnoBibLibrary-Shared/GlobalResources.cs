@@ -25,14 +25,29 @@ namespace AnnoBibLibrary.Shared
         public static string[] CitationFormatsFormatted => CitationFormats.Keys.ToList().Select((key) => key = Tools.Capitalize(key)).ToArray();
 
         public static Library OpenLibrary { get; } = new Library("Test Library");
+        private static List<Tuple<string, Type>> _libraryFilters;
+        public const int STANDARD_FILTERS_DROPOFF_INDEX = 4;
 
         // Initialize all the Resource Data, avaialble throughout the
         // entire program
         // TODO - eventually store in external data
-        public static void Initialize()
+        public static void Initialize() 
         {
+            _libraryFilters = new List<Tuple<string, Type>> (
+                new Tuple<string, Type>[]
+                {
+                    new Tuple<string, Type>("Title", typeof(WordField)),
+                    new Tuple<string, Type>("Author", typeof(NameField)),
+                    new Tuple<string, Type>("Publisher", typeof(WordField)),
+                    new Tuple<string, Type>("Publish Year", typeof(NumberField)),
+                    new Tuple<string, Type>("KeyGroup: Any", typeof(WordField))
+                }
+            );
+
+            ResetOpenLibraryKeywords();
+
             CreateInitialDirectories();
-            OpenLibrary.SetKeywordGroups("Keywords", "Concepts");
+            OpenLibrary.SetKeywordGroups("Keywords");
 
             // Create a print CitationFormat
             CitationFormat printFormat = new CitationFormat("Print");
@@ -65,6 +80,22 @@ namespace AnnoBibLibrary.Shared
 
         }
 
+        public static void ResetOpenLibraryKeywords()
+        {
+            _libraryFilters.RemoveRange(
+                STANDARD_FILTERS_DROPOFF_INDEX + 1,
+                _libraryFilters.Count - (STANDARD_FILTERS_DROPOFF_INDEX + 1)
+            );
+
+            foreach (var kwdGroup in OpenLibrary.KeywordGroupsFormatted)
+                _libraryFilters.Add(
+                    new Tuple<string, Type>(
+                        $"KeyGroup: {kwdGroup}",
+                        typeof(WordField)
+                    )
+                );
+        }
+
         public static void CreateInitialDirectories()
         {
             var documentsFolder = Environment.SpecialFolder.Personal.ToString();
@@ -87,5 +118,7 @@ namespace AnnoBibLibrary.Shared
 
             else return CitationFormats[lowercaseName];
         }
+    
+        public static Tuple<string, Type>[] LibraryFilters =>  _libraryFilters.ToArray();
     }
 }

@@ -91,7 +91,6 @@
     <Compile Include="Custom Controls\TableViewKeywordGroups.designer.cs">
       <DependentUpon>TableViewKeywordGroups.cs</DependentUpon>
     </Compile>
-    <Compile Include="Custom Controls\EditableTextView.cs" />
     <Compile Include="ViewControllers\MainViewController.cs" />
     <Compile Include="ViewControllers\MainViewController.designer.cs">
       <DependentUpon>MainViewController.cs</DependentUpon>
@@ -102,17 +101,25 @@
     </Compile>
     <Compile Include="Data Sources\DataSourceOutlineViewSourceFields.cs" />
     <Compile Include="Control Delegates\DelegateOutlineViewSourceFields.cs" />
-    <Compile Include="Custom Controls\EditableDatePicker.cs" />
     <Compile Include="ViewControllers\NewSourceViewController.cs" />
     <Compile Include="ViewControllers\NewSourceViewController.designer.cs" />
-    <Compile Include="Custom Controls\IEditableView.cs" />
-    <Compile Include="Custom Controls\EditableLabelAndTextFieldView.cs" />
+    <Compile Include="Data Sources\DataSourceTableViewKeywords.cs" />
+    <Compile Include="Control Delegates\DelegateTableViewKeywords.cs" />
+    <Compile Include="Data Sources\DataSourceTableViewSourceFilter.cs" />
+    <Compile Include="Control Delegates\DelegateTableViewSourceFilter.cs" />
+    <Compile Include="Custom Controls\EditableDatePicker.cs" />
     <Compile Include="Custom Controls\EditableLabelAndDatePicker.cs" />
     <Compile Include="Custom Controls\EditableLabelAndMultimedia.cs" />
+    <Compile Include="Custom Controls\EditableLabelAndTextFieldView.cs" />
     <Compile Include="Custom Controls\EditableOutlineView.cs" />
     <Compile Include="Custom Controls\EditableOutlineView.designer.cs">
       <DependentUpon>EditableOutlineView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Custom Controls\EditableTextView.cs" />
+    <Compile Include="Custom Controls\IEditableView.cs" />
+    <Compile Include="Custom Controls\EditableComboTextFieldAndRemoveButton.cs" />
+    <Compile Include="Data Sources\DataSourceTableViewSources.cs" />
+    <Compile Include="Control Delegates\DelegateTableViewSources.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />

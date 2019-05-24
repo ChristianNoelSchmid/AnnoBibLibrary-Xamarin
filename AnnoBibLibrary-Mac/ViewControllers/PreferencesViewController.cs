@@ -109,6 +109,8 @@ namespace AnnoBibLibraryMac
                 keywords[i] = DataSourceKeywordGroups.Keywords[i].GroupName;
 
             OpenLibrary.SetKeywordGroups(keywords);
+            GlobalResources.ResetOpenLibraryKeywords();
+
             NSApplication.SharedApplication.KeyWindow.Close();
         }
 

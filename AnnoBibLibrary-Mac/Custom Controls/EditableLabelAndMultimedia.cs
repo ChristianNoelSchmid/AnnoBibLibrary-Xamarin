@@ -21,6 +21,8 @@ namespace AnnoBibLibraryMac.CustomControls
                 Bordered = false,
                 StringValue = label
             });
+
+            SetHoldingPriority(500f, 0);
         }
     }
 }

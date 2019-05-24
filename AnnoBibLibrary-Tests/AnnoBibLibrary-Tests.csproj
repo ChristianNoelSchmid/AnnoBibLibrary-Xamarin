@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="SourceTests.cs" />
     <Compile Include="LibraryTests.cs" />
+    <Compile Include="SourceSorterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

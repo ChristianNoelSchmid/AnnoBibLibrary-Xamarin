@@ -3,6 +3,7 @@ using AnnoBibLibrary.Shared.Fields;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,85 +12,208 @@ namespace AnnoBibLibrary.Shared
 {
     public class SourceSorter
     {
-        private Source[] _sources;
-        public SortedList<string, SortedSet<Source>> SourcesSorted { get; private set; } = new SortedList<string, SortedSet<Source>>();
-        public string SortByField { get; set; }
+        // The Library attached to the SourceSorter
+        private readonly Library library;
+
+        private string _sortByField = "title";
+        // The Field that is being used to sort
+        public string SortByField
+        {
+            get => _sortByField;
+            set
+            {
+                _sortByField = value.ToLower();
+                fieldGroups.Clear();
+                sortedSources.ToList().ForEach((obj) => GenerateGroup(obj));
+                DisplaySourceGroup(null);
+            }
+        }
+        // The List of Field groups for every sorted Source (ie. "Author - C.S. Lewis, J.R.R. Tolkien, ...")
+        private SortedSet<string> fieldGroups = new SortedSet<string>();
+        // The Collection of sorted Sources
+        private SortedSet<Source> sortedSources = new SortedSet<Source>();
+        // The Collection of displayed Sources - a ObservableCollection, which updates the Source TableView
+        public List<Source> DisplayedSources = new List<Source>();
+        // The List of Filter Info associated with the SourceSorter - used so that when Sources
+        // are added to the associated Library, the SourceSorter does not need to reimport filter info
+        private List<SourceSorterFilterInfo> _filterInfo = new List<SourceSorterFilterInfo>();
+
+        public EventHandler SorterUpdated { get; set; }
+        public string[] FieldGroup => fieldGroups.ToArray();
+
+        private const string SORT_BY_ALL_VALUE = "title";
+        private readonly string[] NUMERICAL_SEARCH_FIELDS = new string[] { "publish year" };
+        private const string KEYWORD_GROUP_START_VALUE = "KeyGroup";
 
         public SourceSorter(Library library)
-        {
-            _sources = library.Sources;
+        { 
+            this.library = library;
         }
 
-        // Sorts through the Source collection, filtering for particular sources
-        // Can have multiple values to sort through: if this is the case, all values must 
-        // be found in single source
-        // The list values act as AND while the function itself acts as OR
-        public void FilterSourcesSingle(string fieldName, IComparable value)
+        public void ImportFilterInfo(SourceSorterFilterInfo[] filterInfo)
         {
-            fieldName = fieldName.ToLower();
-
-            foreach (var source in _sources)
-            {
-                Field field = source[fieldName];
-                if (field != null)
-                {
-                    if (field.ContainsValue(value))
-                        AddToSortedSources(source);
-                }
-            }
+            _filterInfo = new List<SourceSorterFilterInfo>(filterInfo);
+            FilterSources();
         }
 
-        // Sorts through the Source collection, filtering for a source that falls
-        // within the bounds of lower and upper
-        public void FilterSourceRange(string fieldName, IComparable lower, IComparable upper)
+        // Resets sortedSources, and filters out any sources that do not fit
+        // parameters established from filterInfo
+        public void FilterSources()
         {
-            fieldName = fieldName.ToLower();
+            // Reset sortedSources, adding all library Sources
+            sortedSources = new SortedSet<Source>();
 
-            foreach (var source in _sources)
+            foreach (var source in library.Sources)
             {
-                Field field = source[fieldName];
-                if (field != null)
+                var filteredIn = true;
+
+                // Iterate through each info parameter in filterInfo
+                foreach (var info in _filterInfo)
                 {
-                    if (field.ContainsRange(lower, upper))
-                        AddToSortedSources(source);
-                }
-            }
-        }
+                    var fieldName = info.FieldName.ToLower();
 
-        private void AddToSortedSources(Source source)
-        {
-            if (SortByField.ToLower() == "all")
-            {
-                if (!SourcesSorted.ContainsKey("all"))
-                    SourcesSorted.Add("all", new SortedSet<Source>());
-
-                SourcesSorted["all"].Add(source);
-            }
-
-            else
-            {
-                Field sortByField = source[SortByField];
-                if (sortByField != null)
-                {
-                    string[] sortByValues = sortByField.FormattedValues;
-
-                    foreach (var val in sortByValues)
+                    // Parse info, checking if it is a ranged search or
+                    // a single search (determined by '-')
+                    foreach (var sParam in info.Parameters.Split(','))
                     {
-                        if (!SourcesSorted.ContainsKey(val))
-                            SourcesSorted.Add(val, new SortedSet<Source>());
+                        var param = sParam.ToLower().Trim();
+                        if (param.Contains("-"))
+                        {
+                            string lower = param.Split('-')[0],
+                                   upper = param.Split('-')[1];
 
-                        SourcesSorted[val].Add(source);
+                            if (NUMERICAL_SEARCH_FIELDS.Contains(info.FieldName))
+                            {
+                                if (int.TryParse(lower, out int iLower) && int.TryParse(upper, out int iUpper))
+                                {
+                                    if (!SourceContainsRange(source, fieldName, iLower, iUpper))
+                                        filteredIn = false;
+                                }
+                            }
+                            else
+                            {
+                                if (!SourceContainsRange(source, fieldName, lower, upper))
+                                    filteredIn = false;
+                            }
+                        }
+                        else
+                        {
+                            if (NUMERICAL_SEARCH_FIELDS.Contains(fieldName))
+                            {
+                                if (int.TryParse(param, out int iParam))
+                                {
+                                    if (!SourceContains(source, fieldName, param))
+                                        filteredIn = false;
+                                }
+                            }
+
+                            else
+                            {
+                                if (!SourceContains(source, fieldName, param))
+                                    filteredIn = false;
+                            }
+                        }
+                    }
+
+                    if (!filteredIn) break;
+                }
+
+                if (filteredIn) sortedSources.Add(source);
+                SorterUpdated(this, null);
+            }
+
+            foreach(var source in sortedSources)
+            {
+                GenerateGroup(source);
+            }
+
+            if(SortByField == SORT_BY_ALL_VALUE) DisplaySourceGroup(null);
+            SorterUpdated(this, null);
+        }
+
+        bool SourceContains(Source source, string fieldName, IComparable value)
+        {
+            Field field;
+            if((field = source.GetField(fieldName)) != null)
+            {
+                if (field.ContainsValue(value)) return true;
+            }
+            else if(fieldName.Contains(KEYWORD_GROUP_START_VALUE))
+            {
+                if (source.KeywordGroupContains(
+                    fieldName.Replace($"{KEYWORD_GROUP_START_VALUE}: ", ""), value as string))
+                    return true;
+            }
+
+            return false;
+        }
+
+        bool SourceContainsRange(Source source, string fieldName, IComparable lower, IComparable upper)
+        {
+            Field field;
+            if((field = source.GetField(fieldName)) != null)
+            {
+                if (field.ContainsRange(lower, upper)) return true;
+            }
+            else if (fieldName.Contains(KEYWORD_GROUP_START_VALUE))
+            {
+                if (source.KeywordGroupContainsRange(
+                    fieldName.Replace($"{KEYWORD_GROUP_START_VALUE}: ", ""),
+                    lower as string, upper as string))
+                    return true;
+            }
+
+            return false;
+        }
+         
+        // Adds the new category to the sorted source
+        private void GenerateGroup(Source source)
+        {
+            var sortByField = source.GetField(SortByField);
+            if (sortByField != null)
+            {
+                foreach (var fieldValue in sortByField.FormattedValues)
+                    fieldGroups.Add(fieldValue);
+            }
+
+            else 
+                fieldGroups.Add($">> {SortByField} Unknown <<");
+        }
+
+        public void DisplaySourceGroup(string groupName)
+        {
+            DisplayedSources.Clear();
+
+            if (SortByField == SORT_BY_ALL_VALUE)
+            {
+                foreach (var source in sortedSources.AsEnumerable())
+                {
+                    DisplayedSources.Add(source);
+                }
+            }
+            else if(groupName != null)
+            {
+                if (fieldGroups.Contains(groupName))
+                {
+                    foreach (var source in sortedSources)
+                    {
+                        Field field = source.GetField(SortByField);
+                        if (field == null) continue;
+
+                        if (field.ContainsValue(groupName))
+                            DisplayedSources.Add(source);
                     }
                 }
-                else
-                {
-                    var newKey = $">>{Tools.Capitalize(SortByField)} Unknown<<";
-                    if (!SourcesSorted.ContainsKey(newKey))
-                        SourcesSorted.Add(newKey, new SortedSet<Source>());
-
-                    SourcesSorted[newKey].Add(source);
-                }
             }
-        }
+
+            SorterUpdated(this, null);
+        } 
+    }
+
+    // SourceSorter filtering information.
+    public struct SourceSorterFilterInfo
+    {
+        public string FieldName;
+        public string Parameters;
     }
 }

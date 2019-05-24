@@ -9,12 +9,12 @@ using System.CodeDom.Compiler;
 
 namespace AnnoBibLibraryMac
 {
-	[Register ("TableViewKeywordGroups")]
-	partial class TableViewKeywordGroups
-	{
-		
-		void ReleaseDesignerOutlets ()
-		{
-		}
-	}
+    [Register ("TableViewKeywordGroups")]
+    partial class TableViewKeywordGroups
+    {
+        
+        void ReleaseDesignerOutlets ()
+        {
+        }
+    }
 }

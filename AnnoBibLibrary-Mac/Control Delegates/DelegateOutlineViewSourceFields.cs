@@ -83,7 +83,7 @@ namespace AnnoBibLibraryMac.ControlDelegates
                     view = new EditableLabelAndDatePicker(field.FieldInfo.Name);
                     var datePicker = (EditableDatePicker)view.Subviews[1];
 
-                    datePicker.ValidateProposedDateValue += (sender, e) => field.Fields[0].Value = ((DateTime)datePicker.DateValue).ToLocalTime();
+                    datePicker.ValidateProposedDateValue += (sender, e) => field.Value = ((DateTime)datePicker.DateValue).ToLocalTime();
                 }
 
                 else
@@ -94,10 +94,10 @@ namespace AnnoBibLibraryMac.ControlDelegates
                     if (field.FieldInfo.FieldType == typeof(NumberField))
                     {
                         textField.Formatter = new NSNumberFormatter();
-                        textField.EditingEnded += (sender, e) => field.Fields[0].Value = int.Parse(textField.StringValue);
+                        textField.EditingEnded += (sender, e) => field.Value = int.Parse(textField.StringValue);
                     }
                     else
-                        textField.EditingEnded += (sender, e) => field.Fields[0].Value = textField.StringValue;
+                        textField.EditingEnded += (sender, e) => field.Value = textField.StringValue;
                 }
 
                 (view as NSSplitView).SetHoldingPriority(500, 0);

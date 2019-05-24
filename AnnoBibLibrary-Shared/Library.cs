@@ -3,6 +3,7 @@ using AnnoBibLibrary.Shared.Fields;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -16,11 +17,14 @@ namespace AnnoBibLibrary.Shared
     [JsonObject(MemberSerialization.OptIn)]
     public class Library
     {
-        private HashSet<Source> _sources = new HashSet<Source>();
-        public Source[] Sources => _sources.ToArray(); 
+        public SortedSet<Source> Sources { get; private set; }
+            = new SortedSet<Source>();
 
         [JsonProperty]
         public string Name { get; private set; }
+
+        [JsonProperty]
+        public string Version { get; private set; }
 
         // All default Keywords associated with this Library
         // Sources will contain their own seperate list of keywords and groups, but
@@ -36,21 +40,29 @@ namespace AnnoBibLibrary.Shared
         public Library(string name)
         {
             Name = name;
+            Version = "0.0.2";
             SetKeywordGroups("Keywords");
         }
 
         [JsonConstructor]
-        public Library(string name, string[] defaultKeywordGroups, int[] sourceHashCodes)
+        public Library(string name, string version, string[] defaultKeywordGroups, int[] sourceHashCodes)
         {
             Name = name;
+            Version = version;
             if (defaultKeywordGroups.Length == 0) SetKeywordGroups("Keywords");
             else KeywordGroups = new List<string>(defaultKeywordGroups);
 
             foreach (int hashCode in sourceHashCodes)
-                _sources.Add(Source.Load($"C:\\Users\\Christian\\Documents\\AnnoBibLibrary\\Sources\\{hashCode}.abs"));
+                Sources.Add(Source.Load($"C:\\Users\\Christian\\Documents\\AnnoBibLibrary\\Sources\\{hashCode}.abs"));
         }
 
-        public bool AddSource(Source source) => _sources.Add(source);
+        public bool AddSource(Source source)
+        {
+            if (Sources.Contains(source)) return false;
+
+            Sources.Add(source); 
+            return true;
+        }
 
         // Adds new Keyword groups to the Library
         // Automatically compares supplied array with current Keyword Group list
@@ -103,7 +115,7 @@ namespace AnnoBibLibrary.Shared
                 {
                     KeywordGroups[i] = newName;
 
-                    foreach(var source in _sources)
+                    foreach(var source in Sources)
                         source.RenameKeywordGroup(originalName, newName);
 
                     return;
@@ -131,7 +143,7 @@ namespace AnnoBibLibrary.Shared
         {
             get
             {
-                return _sources.Select((source) => source.GetHashCode()).ToArray();
+                return Sources.Select((source) => source.GetHashCode()).ToArray();
             }
         }
 

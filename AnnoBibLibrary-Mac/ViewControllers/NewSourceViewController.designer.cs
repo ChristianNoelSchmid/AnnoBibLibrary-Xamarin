@@ -13,6 +13,9 @@ namespace AnnoBibLibraryMac
 	partial class NewSourceViewController
 	{
 		[Outlet]
+		AppKit.NSButton CheckBoxTitleUnknown { get; set; }
+
+		[Outlet]
 		AppKit.NSComboBox ComboBoxFormats { get; set; }
 
 		[Outlet]
@@ -20,6 +23,9 @@ namespace AnnoBibLibraryMac
 
 		[Outlet]
 		AnnoBibLibraryMac.EditableOutlineView OutlineViewSourceFields { get; set; }
+
+		[Outlet]
+		AppKit.NSTableView TableViewKeywords { get; set; }
 
 		[Outlet]
 		AppKit.NSTextField TextFieldTitle { get; set; }
@@ -38,6 +44,16 @@ namespace AnnoBibLibraryMac
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (TableViewKeywords != null) {
+				TableViewKeywords.Dispose ();
+				TableViewKeywords = null;
+			}
+
+			if (CheckBoxTitleUnknown != null) {
+				CheckBoxTitleUnknown.Dispose ();
+				CheckBoxTitleUnknown = null;
+			}
+
 			if (ComboBoxFormats != null) {
 				ComboBoxFormats.Dispose ();
 				ComboBoxFormats = null;

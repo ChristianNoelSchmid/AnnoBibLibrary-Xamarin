@@ -4,18 +4,78 @@ using System;
 
 using Foundation;
 using AppKit;
+using AnnoBibLibraryMac.DataSources;
+using AnnoBibLibraryMac.ControlDelegates;
+using AnnoBibLibrary.Shared;
+using AnnoBibLibrary.Shared.Bibliography;
 
 namespace AnnoBibLibraryMac
 {
-	public partial class MainViewController : NSViewController
-	{
-		public MainViewController (IntPtr handle) : base (handle)
-		{
-		}
+    public partial class MainViewController : NSViewController
+    {
+        public MainViewController(IntPtr handle) : base(handle)
+        {
+        }
+
+        DataSourceTableViewSourceFilter DataSourceFilters = new DataSourceTableViewSourceFilter();
+        public DelegateTableViewSourceFilter sourceFilterDelegate;
+        private SourceSorter _sourceSorter;
 
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-}
+
+            NSString[] strings = new NSString[GlobalResources.STANDARD_FILTERS_DROPOFF_INDEX + 1];
+            for (int i = 0; i < strings.Length; ++i)
+                strings[i] = new NSString(GlobalResources.LibraryFilters[i].Item1);
+            strings[strings.Length - 1] = new NSString("Keyword");
+
+            ComboBoxSortBy.Add(strings);
+            ComboBoxSortBy.StringValue = "Title";
+
+            _sourceSorter = new SourceSorter(GlobalResources.OpenLibrary);
+            sourceFilterDelegate = new DelegateTableViewSourceFilter(DataSourceFilters, _sourceSorter);
+            TableViewSourceFilters.DataSource = DataSourceFilters;
+            TableViewSourceFilters.Delegate = sourceFilterDelegate;
+
+            var sourcesDataSource = new DataSourceTableViewSources(_sourceSorter);
+            TableViewSources.DataSource = sourcesDataSource;
+            TableViewSources.Delegate = new DelegateTableViewSources(sourcesDataSource);
+
+            _sourceSorter.SorterUpdated += (sender, e) =>
+            {
+                TableViewSources.ReloadData();
+
+
+            }
+
+            CreateSources();
+        }
+
+        private void CreateSources()
+        {
+            CitationFormat format = GlobalResources.GetFormat("Print");
+            Source source1 = new Source(format),
+                   source2 = new Source(format),
+                   source3 = new Source(format);
+
+            source1.GetField("title").SetValues("The Lion, the Witch, and the Wardrobe");
+            source1.GetField("author").SetValues("C.S. Lewis");
+            source2.GetField("title").SetValues("The Lord of the Rings: the Fellowship of the Ring");
+            source2.GetField("author").SetValues("J.R.R. Tolkien");
+            source3.GetField("title").SetValues("To Kill a Mockingbird");
+            source3.GetField("author").SetValues("Harper Lee");
+
+            GlobalResources.OpenLibrary.AddSource(source1);
+            GlobalResources.OpenLibrary.AddSource(source2);
+            GlobalResources.OpenLibrary.AddSource(source3);
+
+            _sourceSorter.FilterSources();
+        }
+
+        partial void OnSortByChanged(NSObject sender)
+        {
+            _sourceSorter.FilterSources();
+        }
     }
 }
